@@ -11,11 +11,14 @@ namespace LeagueOf2D
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        Player lux;
 
         public Lo2D()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            this.IsMouseVisible = true;
+            lux = new Player(Content);
         }
 
         /// <summary>
@@ -39,8 +42,8 @@ namespace LeagueOf2D
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
             // TODO: use this.Content to load your game content here
+            lux.LoadPlayer();
         }
 
         /// <summary>
@@ -62,6 +65,8 @@ namespace LeagueOf2D
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            lux.UpdatePlayer(gameTime);
+
             // TODO: Add your update logic here
 
             base.Update(gameTime);
@@ -74,9 +79,8 @@ namespace LeagueOf2D
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
+            lux.DrawPlayer(gameTime,this.spriteBatch);
             // TODO: Add your drawing code here
-
             base.Draw(gameTime);
         }
     }

@@ -92,7 +92,7 @@
 
 		Exemplo:
 
-		Mudanças:
+		Changes:
 		- Corrigi um erro onde "Hello World!" era printado como "Helo Word!".
 		- Corrigi um erro onde a função de soma não funcionava para números negativos.
 		- Otimizei a função "inverseSquareRoot".

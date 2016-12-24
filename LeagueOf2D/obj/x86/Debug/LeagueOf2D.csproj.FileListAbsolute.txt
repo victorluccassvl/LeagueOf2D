@@ -23,3 +23,5 @@ c:\users\victo\documents\visual studio 2015\Projects\LeagueOf2D\LeagueOf2D\bin\W
 c:\users\victo\documents\visual studio 2015\Projects\LeagueOf2D\LeagueOf2D\obj\x86\Debug\LeagueOf2D.csprojResolveAssemblyReference.cache
 c:\users\victo\documents\visual studio 2015\Projects\LeagueOf2D\LeagueOf2D\obj\x86\Debug\LeagueOf2D.exe
 c:\users\victo\documents\visual studio 2015\Projects\LeagueOf2D\LeagueOf2D\obj\x86\Debug\LeagueOf2D.pdb
+C:\Users\victo\Documents\Visual Studio 2015\Projects\LeagueOf2D\LeagueOf2D\bin\Windows\x86\Debug\Content\dickbutt.xnb
+C:\Users\victo\Documents\Visual Studio 2015\Projects\LeagueOf2D\LeagueOf2D\bin\Windows\x86\Debug\Content\Lux.xnb
