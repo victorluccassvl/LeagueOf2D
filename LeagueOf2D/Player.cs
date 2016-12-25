@@ -23,8 +23,8 @@ namespace LeagueOf2D
             this.position = new Vector2(50.0f, 50.0f);
             this.velocity = new Vector2(0.0f, 1.0f);
             this.destination = new Vector2(0.0f, 0.0f);
-            this.speed = 0.2f;
-            this.delta = 0.05f;
+            this.speed = 0.5f;
+            this.delta = 5.0f;
             this.moving = false;
         }
 
@@ -44,17 +44,14 @@ namespace LeagueOf2D
             MouseState mouseState = Mouse.GetState();
             if (mouseState.RightButton == ButtonState.Pressed)
             {
-                if (velocity.X != mouseState.X && velocity.Y != mouseState.Y)
-                {
-                    moving = true;
-                    destination.X = mouseState.X;
-                    destination.Y = mouseState.Y;
-                    velocity.X = mouseState.X - position.X;
-                    velocity.Y = mouseState.Y - position.Y;
-                    float aux = (float)Math.Sqrt((Math.Pow(velocity.X, 2)) + (Math.Pow(velocity.Y, 2)));
-                    velocity.X /= aux;
-                    velocity.Y /= aux;
-                }
+                moving = true;
+                destination.X = mouseState.X;
+                destination.Y = mouseState.Y;
+                velocity.X = destination.X - position.X;
+                velocity.Y = destination.Y - position.Y;
+                float normalizer = (float)Math.Sqrt((Math.Pow(velocity.X, 2)) + (Math.Pow(velocity.Y, 2)));
+                velocity.X /= normalizer;
+                velocity.Y /= normalizer;
             }
             if (position.X < destination.X + delta && position.X > destination.X - delta)
             {
@@ -73,7 +70,11 @@ namespace LeagueOf2D
         public void DrawPlayer(GameTime gameTime, SpriteBatch spriteBatch)
         {
             spriteBatch.Begin();
+            this.position.X -= 25;
+            this.position.Y -= 25;
             spriteBatch.Draw(this.skin, this.position, Color.White);
+            this.position.X += 25;
+            this.position.Y += 25;
             spriteBatch.End();
         }
     }
