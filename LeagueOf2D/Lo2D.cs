@@ -1,65 +1,48 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Content;
 
 namespace LeagueOf2D
 {
-    /// <summary>
-    /// This is the main type for your game.
-    /// </summary>
     public class Lo2D : Game
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        Vector2 screen_size;
         Player lux;
+        Map map;
 
         public Lo2D()
         {
-            graphics = new GraphicsDeviceManager(this);
-            Content.RootDirectory = "Content";
+            this.graphics = new GraphicsDeviceManager(this);
+            this.screen_size = new Vector2(1000, 500);
+            this.graphics.PreferredBackBufferWidth  = (int) this.screen_size.X;
+            this.graphics.PreferredBackBufferHeight = (int) this.screen_size.Y;
+            this.graphics.ApplyChanges();
+            this.Content.RootDirectory = "Content";
             this.IsMouseVisible = true;
-            lux = new Player(Content);
+            this.map = new Map(this.Content);
+            this.lux = new Player(this.Content, this.map);
         }
 
-        /// <summary>
-        /// Allows the game to perform any initialization it needs to before starting to run.
-        /// This is where it can query for any required services and load any non-graphic
-        /// related content.  Calling base.Initialize will enumerate through any components
-        /// and initialize them as well.
-        /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-
             base.Initialize();
         }
 
-        /// <summary>
-        /// LoadContent will be called once per game and is the place to load
-        /// all of your content.
-        /// </summary>
         protected override void LoadContent()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-            // TODO: use this.Content to load your game content here
+            this.spriteBatch = new SpriteBatch(GraphicsDevice);
+            map.LoadMap();
             lux.LoadPlayer();
         }
 
-        /// <summary>
-        /// UnloadContent will be called once per game and is the place to unload
-        /// game-specific content.
-        /// </summary>
         protected override void UnloadContent()
         {
-            // TODO: Unload any non ContentManager content here
         }
 
-        /// <summary>
-        /// Allows the game to run logic such as updating the world,
-        /// checking for collisions, gathering input, and playing audio.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
@@ -67,20 +50,19 @@ namespace LeagueOf2D
 
             lux.UpdatePlayer(gameTime);
 
-            // TODO: Add your update logic here
-
             base.Update(gameTime);
         }
 
-        /// <summary>
-        /// This is called when the game should draw itself.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.White);
-            lux.DrawPlayer(gameTime,this.spriteBatch);
-            // TODO: Add your drawing code here
+            spriteBatch.Begin();
+
+            map.DrawMap(gameTime, this.spriteBatch);
+            lux.DrawPlayer(gameTime, this.spriteBatch);
+
+
+            spriteBatch.End();
             base.Draw(gameTime);
         }
     }

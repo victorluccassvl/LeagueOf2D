@@ -5,5 +5,7 @@
   <Config />
   <SourceFiles>
     <File>C:/Users/victo/Documents/Visual Studio 2015/Projects/LeagueOf2D/LeagueOf2D/Content/Lux.png</File>
+    <File>C:/Users/victo/Documents/Visual Studio 2015/Projects/LeagueOf2D/LeagueOf2D/Content/Wall.png</File>
+    <File>C:/Users/victo/Documents/Visual Studio 2015/Projects/LeagueOf2D/LeagueOf2D/Content/Radius.png</File>
   </SourceFiles>
 </SourceFileCollection>
