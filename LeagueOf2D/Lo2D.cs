@@ -46,7 +46,7 @@ namespace LeagueOf2D
 
         /**
          * MonoGame Initialize method
-         * 
+         *
          * Where things should be initialize at the beggining of game loop
          * ( is called only once )
          */
@@ -74,7 +74,7 @@ namespace LeagueOf2D
 
         /**
          * MonoGame Load method
-         * 
+         *
          * Where things should be loaded in order to be used at the game
          * ( is called only once )
          */
@@ -93,7 +93,7 @@ namespace LeagueOf2D
 
         /**
          * MonoGame Unload method
-         * 
+         *
          * Where things should be unloaded in order to close the game
          * ( is called only once )
          */
@@ -106,17 +106,19 @@ namespace LeagueOf2D
 
         /**
          * MonoGame Update method
-         * 
+         *
          * Where all dynamic logic that controls the game should be implemented
          * ( is called every game tick )
-         * 
+         *
          * :gameTime: snapshot variable that holds all Game time information
          */
         protected override void Update (GameTime gameTime)
         {
             // Monogame sugested exit shortcuts
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
+            if (GamePad.GetState (PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState ().IsKeyDown (Keys.Escape))
+            {
+                System.Environment.Exit (0);
+            }
 
             // Updates test player, passing time info as param
             this.lux.UpdatePlayer(gameTime);
@@ -129,10 +131,10 @@ namespace LeagueOf2D
 
         /**
          * MonoGame Draw method
-         * 
+         *
          * Where all sprites and graphics will be shown at the screen
          * ( is called every game tick )
-         * 
+         *
          * :gameTime: snapshot variable that holds all Game time information
          */
         protected override void Draw (GameTime gameTime)

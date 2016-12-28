@@ -2,7 +2,6 @@
 
 namespace LeagueOf2D
 {
-#if WINDOWS || LINUX
     /// <summary>
     /// The main class.
     /// </summary>
@@ -18,5 +17,4 @@ namespace LeagueOf2D
                 game.Run();
         }
     }
-#endif
 }
