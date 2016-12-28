@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -6,63 +7,151 @@ using Microsoft.Xna.Framework.Content;
 
 namespace LeagueOf2D
 {
+    /**
+     * Main class of League Of 2D, which inherit from Game class of MonoGame
+     */
     public class Lo2D : Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
-        Vector2 screen_size;
-        Player lux;
-        Map map;
+        /**
+         * Attributes and Properties
+         */
 
-        public Lo2D()
+        // Object to control game window
+        private GraphicsDeviceManager graphics;
+        // Object to allow drawing
+        private SpriteBatch spriteBatch;
+        // Size of screen (x and Y fields)
+        private Vector2 screen_size;
+        // Player example for tests
+        private Player lux;
+        // Game map
+        private Map map;
+
+
+
+        /**
+         * League of Legends 2D constructor
+         */
+        public Lo2D ()
         {
+            // Create the graphic object
             this.graphics = new GraphicsDeviceManager(this);
-            this.screen_size = new Vector2(1000, 500);
-            this.graphics.PreferredBackBufferWidth  = (int) this.screen_size.X;
-            this.graphics.PreferredBackBufferHeight = (int) this.screen_size.Y;
-            this.graphics.ApplyChanges();
-            this.Content.RootDirectory = "Content";
-            this.IsMouseVisible = true;
+            // Create the game map
             this.map = new Map(this.Content);
+            // Create the test player
             this.lux = new Player(this.Content, this.map);
         }
 
-        protected override void Initialize()
+
+
+        /**
+         * MonoGame Initialize method
+         * 
+         * Where things should be initialize at the beggining of game loop
+         * ( is called only once )
+         */
+        protected override void Initialize ()
         {
+            // Initializes screen size variable with defined constant
+            this.screen_size = Ctt.screen_size;
+
+            // Sets screen size with it's associated variable and apply the change
+            this.graphics.PreferredBackBufferWidth = (int)this.screen_size.X;
+            this.graphics.PreferredBackBufferHeight = (int)this.screen_size.Y;
+            this.graphics.ApplyChanges();
+
+            // Sets the content directory with MonoGame suggested name
+            this.Content.RootDirectory = "Content";
+
+            // Initializes mouse as visible, with defined constant
+            this.IsMouseVisible = Ctt.mouse_visibility;
+
+            // Initializes Game base ( MonoGame requires )
             base.Initialize();
         }
 
-        protected override void LoadContent()
+
+
+        /**
+         * MonoGame Load method
+         * 
+         * Where things should be loaded in order to be used at the game
+         * ( is called only once )
+         */
+        protected override void LoadContent ()
         {
+            // Loads spriteBatch object
             this.spriteBatch = new SpriteBatch(GraphicsDevice);
-            map.LoadMap();
-            lux.LoadPlayer();
+
+            // Loads the map
+            this.map.LoadMap();
+            // Loads the test player
+            this.lux.LoadPlayer();
         }
 
-        protected override void UnloadContent()
+
+
+        /**
+         * MonoGame Unload method
+         * 
+         * Where things should be unloaded in order to close the game
+         * ( is called only once )
+         */
+        protected override void UnloadContent ()
         {
+            //TODO
         }
 
-        protected override void Update(GameTime gameTime)
+
+
+        /**
+         * MonoGame Update method
+         * 
+         * Where all dynamic logic that controls the game should be implemented
+         * ( is called every game tick )
+         * 
+         * :gameTime: snapshot variable that holds all Game time information
+         */
+        protected override void Update (GameTime gameTime)
         {
+            // Monogame sugested exit shortcuts
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            lux.UpdatePlayer(gameTime);
+            // Updates test player, passing time info as param
+            this.lux.UpdatePlayer(gameTime);
 
+            // Updates Game base ( MonoGame requires )
             base.Update(gameTime);
         }
 
-        protected override void Draw(GameTime gameTime)
+
+
+        /**
+         * MonoGame Draw method
+         * 
+         * Where all sprites and graphics will be shown at the screen
+         * ( is called every game tick )
+         * 
+         * :gameTime: snapshot variable that holds all Game time information
+         */
+        protected override void Draw (GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.White);
-            spriteBatch.Begin();
+            // Monogame suggested screen initialization
+            this.GraphicsDevice.Clear(Color.White);
 
-            map.DrawMap(gameTime, this.spriteBatch);
-            lux.DrawPlayer(gameTime, this.spriteBatch);
+            // Prepares spriteBatch for drawing
+            this.spriteBatch.Begin();
 
+            // Draws game map, sending the prepared spriteBatch and game time
+            this.map.DrawMap(gameTime, this.spriteBatch);
+            // Draws test player, sending the prepared spriteBatch and game time
+            this.lux.DrawPlayer(gameTime, this.spriteBatch);
 
-            spriteBatch.End();
+            // Ends spriteBatch drawing proccess
+            this.spriteBatch.End();
+
+            // Draws Game base ( MonoGame requires )
             base.Draw(gameTime);
         }
     }

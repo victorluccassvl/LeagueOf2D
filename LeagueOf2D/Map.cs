@@ -1,69 +1,151 @@
 ﻿using System;
 using System.Drawing;
+using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
-using System.IO;
 
 namespace LeagueOf2D
 {
+    /**
+     * Map class that represents the terrain in which the game will run
+     * Contains a structure to verify terrain colision
+     */
     class Map
     {
-        private ContentManager content;
-        private Texture2D wall;
-        private bool[,] obstruction;
-        private Vector2 size;
-        private Bitmap img;
+        /**
+         * Attributes and Properties
+         */
 
-        public Map(ContentManager content)
+        // Game's content manager reference
+        private ContentManager content;
+        // Map texture
+        private Texture2D map;
+        // Map of pixels that warns if that area is solid or not
+        private bool[,] obstruction;
+        // Map size
+        private Vector2 size;
+
+
+
+        /**
+         * Map constructor
+         * 
+         * :content: content reference given from the game
+         */
+        public Map (ContentManager content)
         {
             this.content = content;
         }
 
-        public void LoadMap()
+
+
+        /**
+         * Map Load method
+         * 
+         * Loads map texture and creates the obstruction map from it
+         */
+        public void LoadMap ()
         {
-            this.wall = this.content.Load<Texture2D>("Wall");
-            using (MemoryStream MS = new MemoryStream())
+            // Loads map texture
+            this.map = this.content.Load<Texture2D>(Ctt.map_texture);
+
+            // Initializes map size variables
+            this.size.X = this.map.Width;
+            this.size.Y = this.map.Height;
+
+            // Block that transforms this Texture2D into a Bitmap, to call CreateMap
             {
-                this.wall.SaveAsPng(MS, this.wall.Width, this.wall.Height);
+                // Creates a memory stream
+                MemoryStream MS = new MemoryStream();
+                // Fills it with Texture2D information
+                this.map.SaveAsPng(MS, this.map.Width, this.map.Height);
+                // Rewinds it
                 MS.Seek(0, SeekOrigin.Begin);
-                this.img = (Bitmap) Bitmap.FromStream(MS);
+                // Calls CreateMap method, passing the Bitmap formed from memory stream
+                this.CreateMap((Bitmap) Bitmap.FromStream(MS));
             }
-            this.CreateMap();
         }
 
-        public void UnloadMap()
-        {
 
+
+        /**
+         * Map Unload method
+         * 
+         * Unload map related textures and structures
+         */
+        public void UnloadMap ()
+        {
+            //TODO
         }
 
-        public void UpdateMap(GameTime gameTime)
-        {
 
+
+        /**
+         * Map Update method
+         * 
+         * Where all map dynamic  map modifications should be done
+         * 
+         * :gameTime: snapshot variable that holds all Game time information
+         */
+        public void UpdateMap (GameTime gameTime)
+        {
+            //Empty for now
         }
 
-        public void DrawMap(GameTime gameTime, SpriteBatch spriteBatch)
+
+
+        /**
+         * Map Draw method
+         * 
+         * Where all sprites and graphics will be shown at the screen
+         * 
+         * :gameTime: snapshot variable that holds all Game time information
+         * :spriteBatch: Game's spriteBatch reference, already prepared
+         */
+        public void DrawMap (GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(this.wall, new Vector2(0,0), Microsoft.Xna.Framework.Color.White);
+            // Draws the map texture at defined position, with a transparent background
+            spriteBatch.Draw(this.map, Ctt.map_origin, Microsoft.Xna.Framework.Color.White);
         }
 
-        private void CreateMap()
+
+
+        /**
+         * Method that initializes the obstruction map, given it's Bitmap form
+         * 
+         * :map: Bitmap representation created by Load Map method
+         */
+        private void CreateMap (Bitmap map)
         {
-            this.size.X = img.Width;
-            this.size.Y = img.Height;
-            this.obstruction = new bool[img.Width,img.Height];
-            for (int i = 0; i < img.Width; i++)
+            // Creates the obstruction map with appropriate size
+            this.obstruction = new bool[this.map.Width, this.map.Height];
+
+            // Creates a reading pixel object
+            System.Drawing.Color pixel;
+            // Iterates the map
+            for (int x = 0; x < map.Width; x++)
             {
-                for (int j = 0; j < img.Height; j++)
+                for (int y = 0; y < map.Height; y++)
                 {
-                    System.Drawing.Color pixel = img.GetPixel(i, j);
+                    // Reads the pixel at position X Y
+                    pixel = map.GetPixel(x, y);
 
-                    this.obstruction[i, j] = !(pixel.R == 255 && pixel.G == 255 && pixel.B == 255);
+                    // Initializes it as false if its not a black pixel
+                    // Initializes it as true if its a black pixel, therefore, an obstruction
+                    this.obstruction[x, y] = !(pixel.R == 255 && pixel.G == 255 && pixel.B == 255);
                 }
             }
         }
 
+
+
+        /**
+         * Method that informs if given position is obstructed or not
+         * 
+         * :x,y: coordenates
+         */
         public bool isObstructed (int x, int y)
         {
             return this.obstruction[x, y];

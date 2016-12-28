@@ -38,6 +38,7 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
     <Compile Include="Lo2D.cs" />
     <Compile Include="Map.cs" />
     <Compile Include="Player.cs" />
