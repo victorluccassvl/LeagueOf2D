@@ -44,7 +44,7 @@
 		 Uso do formato a seguir para funções de teste
 
 		 Exemplo:
-		/**
+		/*
 		 * This function prints hello world [x] times.
 		 *
 		 * :x: number of times to print hello world.
@@ -92,7 +92,7 @@
 
 		Exemplo:
 
-		Changes:
+		Titulo
 		- Corrigi um erro onde "Hello World!" era printado como "Helo Word!".
 		- Corrigi um erro onde a função de soma não funcionava para números negativos.
 		- Otimizei a função "inverseSquareRoot".
@@ -100,7 +100,7 @@
 	2.7) Seguir o padrão a seguir para descrição de classes e métodos :
 
 		Exemplo:
-		/**
+		/*
 		 * This is a projectile, it can collide and/or deal damage to a character.
 		 */
 		class Projectile
@@ -108,7 +108,7 @@
 			public int damage;
 			public float time_to_live;
 
-			/**
+			/*
 			 * :damage: the amount of damage this projectile does.
 			 * :ttl: time to live in seconds (after this time the projectile disappears).
 			 */
@@ -118,7 +118,7 @@
 				this.time_to_live = ttl;
 			}
 
-			/**
+			/*
 			 * Time to live defaults to 1 minute.
 			 *
 			 * :damage: the amount of damage this projectile does.
@@ -129,7 +129,7 @@
 				this.time_to_live = 60;
 			}
 
-			/**
+			/*
 			 * Damage defaults to 0.
 			 * Time to live defaults to 1 minute.
 			 */
@@ -156,7 +156,9 @@
 
 	3.7) Criar métodos de teste para funções grandes e essenciais
 
-	3.8) Utilizar blocos vazios para evitar uso de funções usadas apenas uma única vez
+	3.8) Obrigatório o uso de this
+
+	3.9) Utilizar blocos vazios para evitar uso de funções usadas apenas uma única vez
 		 Utilizar blocos vazios para evitar encadear muita informação em apenas uma linha
 
 		 Obs: Um bloco vazio consiste na abertura e fechamento de chaves {}, criando um bloco com escopo próprio
