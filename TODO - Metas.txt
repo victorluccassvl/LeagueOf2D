@@ -1,5 +1,5 @@
 TO DO : 
 Criar um mapa com paredes de 0º e 90º apenas.
 Criar um personagem com hitbox redonda, que se mova com comando de clique ao utilizar botão direito.
-Criar as colisões desse personagem com as paredes. ( Sugerir algoritmos que procurem funcionar para quando criarmos mapas com menos restrições )
-Criar um algoritmo de path finding no clique de movimentação do personagem ( Sugerir algoritmos que procurem funcionar em situações menos específicas )
+Criar as colisões desse personagem com as paredes. ( Sugerir algoritmos que procurem funcionar para quando criarmos mapas com menos restrições ).
+Criar um algoritmo de path finding no clique de movimentação do personagem ( Sugerir algoritmos que procurem funcionar em situações menos específicas ).
