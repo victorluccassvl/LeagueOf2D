@@ -85,20 +85,8 @@ namespace LeagueOf2D
 
                         if (neighbour.heap_state == -1)
                         {
-                            bool obstructed = false;
 
-                            for (int i = 0; i < size; i++)
-                            {
-
-                                int obs_x = border[0, i] + tile_x;
-                                int obs_y = border[1, i] + tile_y;
-
-                                if (this.obstruction_map.isObstructed(obs_x, obs_y))
-                                {
-                                    obstructed = true;
-                                    break;
-                                }
-                            }
+                            bool obstructed = this.obstruction_map.isObstructed(tile_x, tile_y);
 
                             if (!obstructed)
                             {
