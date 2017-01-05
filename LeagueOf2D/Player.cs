@@ -46,9 +46,15 @@ namespace LeagueOf2D
         private Vector2 path_dest;
         private bool ep;
 
+
+        private PathNode[] path_to_destination = new PathNode[1000000];
+        private int path_size;
+        private bool path_found = false;
+
+
         /**
          * Player constructor
-         * 
+         *
          * :content: content reference given from the game
          * :map: map where the player is at
          */
@@ -74,7 +80,7 @@ namespace LeagueOf2D
 
         /**
          * Player Load method
-         * 
+         *
          * Loads player skin and creates the radius structure
          */
         public void LoadPlayer ()
@@ -101,7 +107,7 @@ namespace LeagueOf2D
 
         /**
          * Player Unload method
-         * 
+         *
          * Unload player related textures and structures
          */
         public void UnloadPlayer ()
@@ -113,18 +119,36 @@ namespace LeagueOf2D
 
         /**
          * Player Update method
-         * 
+         *
          * Where all player dynamic actions should be done
-         * 
+         *
          * :gameTime: snapshot variable that holds all Game time information
          */
         public void UpdatePlayer (GameTime gameTime)
         {
-           
+
             // Gets current mouse state
             MouseState mouseState = Mouse.GetState();
 
 
+            if (this.ep == true && this.path_size > 0)
+            {
+                float stamina = this.speed * gameTime.ElapsedGameTime.Milliseconds;
+                while (stamina > 0 && this.path_size > 0)
+                {
+                    PathNode cur_position = this.path_to_destination[this.path_size];
+                    PathNode next_position = this.path_to_destination[this.path_size - 1];
+                    int cost = 10;
+                    if (next_position.x != cur_position.x && next_position.y != cur_position.y)
+                    {
+                        cost = 14;
+                    }
+                    this.path_size--;
+                    stamina -= cost;
+                }
+                PathNode location = this.path_to_destination[this.path_size];
+                this.position = new Vector2(location.x, location.y);
+            }
             if (mouseState.LeftButton == ButtonState.Pressed)
             {
                 this.path.CreatePath(new Vector2(mouseState.X, mouseState.Y));
@@ -132,9 +156,26 @@ namespace LeagueOf2D
                 this.path_dest.Y = mouseState.Y;
                 this.ep = true;
 
+                PathNode aux = this.path.path_map[(int) this.path_dest.X, (int) this.path_dest.Y];
+                this.path_size = 0;
+                while ( aux.father != null)
+                {
+                    this.path_to_destination[this.path_size++] = aux;
+                    aux = aux.father;
+                }
+                this.path_to_destination[this.path_size] = aux;
+
+                if (this.path_size == 0)
+                {
+                    this.path_found = false;
+                }
+                else
+                {
+                    this.path_found = true;
+                }
             }
-                // If the right button has been pressed
-                if (mouseState.RightButton == ButtonState.Pressed)
+            // If the right button has been pressed
+            if (mouseState.RightButton == ButtonState.Pressed)
             {
                 // This is the new player destination
                 this.destination.X = mouseState.X;
@@ -146,7 +187,7 @@ namespace LeagueOf2D
 
                 // If it's not the origin, them the player will have to move
                 this.moving = (!(at_this_x && at_this_y));
-            
+
                 // If the player will move, we need to find the new direction
                 if (this.moving)
                 {
@@ -195,7 +236,7 @@ namespace LeagueOf2D
                     // Find the border based on player position
                     x = (int)Math.Round(this.radius_border[0, i] + this.position.X);
                     y = (int)Math.Round(this.radius_border[1, i] + this.position.Y);
-                    
+
                     // If this pixel is a wall
                     if (this.map.isObstructed(x, y))
                     {
@@ -225,9 +266,9 @@ namespace LeagueOf2D
 
         /**
          * Player Draw method
-         * 
+         *
          * Show player animation and textures
-         * 
+         *
          * :gameTime: snapshot variable that holds all Game time information
          * :spriteBatch: Game's spriteBatch reference, already prepared
          */
@@ -248,6 +289,15 @@ namespace LeagueOf2D
                     spriteBatch.Draw(this.skin,new Vector2(aux.x, aux.y),new Microsoft.Xna.Framework.Rectangle(23,23,2,2), Microsoft.Xna.Framework.Color.White);
                     aux = aux.father;
                 }
+
+                if (this.path_found == true)
+                {
+                    float print_x = this.path_to_destination[this.path_size].x - (this.skin.Width / 2);
+                    float print_y = this.path_to_destination[this.path_size].y - (this.skin.Height / 2);
+                    Vector2 print_loc = new Vector2(print_x, print_y);
+
+                    spriteBatch.Draw(this.skin, print_loc, Microsoft.Xna.Framework.Color.White);
+                }
             }
             // Prints it
             spriteBatch.Draw(this.skin, print, Microsoft.Xna.Framework.Color.White);
@@ -258,7 +308,7 @@ namespace LeagueOf2D
 
         /**
          * Method that initializes the radius of the player, given it's Bitmap form
-         * 
+         *
          * :rad: Bitmap representation created by Player Load
          */
         private void CreateRadius(Bitmap rad)
