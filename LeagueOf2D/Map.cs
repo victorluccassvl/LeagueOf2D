@@ -25,7 +25,7 @@ namespace LeagueOf2D
         // Map of pixels that warns if that area is solid or not
         private bool[,] obstruction;
         // Map size
-        private Vector2 size;
+        public Vector2 size;
 
 
 

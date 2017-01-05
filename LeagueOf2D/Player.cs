@@ -24,11 +24,11 @@ namespace LeagueOf2D
         // Radius model
         private Texture2D radius;
         // Current position
-        private Vector2 position;
+        public Vector2 position;
         // Velocity vector ( movement direction, with norm 1)
         private Vector2 velocity;
         // Player destination if moving
-        private Vector2 destination;
+        public Vector2 destination;
         // Speed intenisty ( movement magnetude )
         private float speed;
         // Locality delta
@@ -36,13 +36,15 @@ namespace LeagueOf2D
         // Moving or not moving variable
         private bool moving;
         // Structure that helps finding radius pixels
-        private int[,] radius_border;
+        public int[,] radius_border;
         // Structure size
-        private int border_size;
+        public int border_size;
         // Map where the player is in
-        private Map map;
-
-
+        public Map map;
+        // Path structure used to find move paths
+        private PathPriority path;
+        private Vector2 path_dest;
+        private bool ep;
 
         /**
          * Player constructor
@@ -54,6 +56,10 @@ namespace LeagueOf2D
         {
             this.content = content;
             this.map = map;
+
+            this.path_dest = new Vector2(0, 0);
+            this.ep = false;
+
 
             // Initializes all variables with defined constants
             this.position = Ctt.player_initial_position;
@@ -76,7 +82,7 @@ namespace LeagueOf2D
             // Loads player skin and radius model
             this.skin = this.content.Load<Texture2D>(Ctt.player_lux);
             this.radius = this.content.Load<Texture2D>(Ctt.player_radius);
-
+            this.path = new PathPriority(this);
             // Block that transforms this Texture2D into a Bitmap, to call CreateRadius
             {
                 // Creates a memory stream
@@ -118,8 +124,17 @@ namespace LeagueOf2D
             // Gets current mouse state
             MouseState mouseState = Mouse.GetState();
 
-            // If the right button has been pressed
-            if (mouseState.RightButton == ButtonState.Pressed)
+
+            if (mouseState.LeftButton == ButtonState.Pressed)
+            {
+                this.path.CreatePath(new Vector2(mouseState.X, mouseState.Y));
+                this.path_dest.X = mouseState.X;
+                this.path_dest.Y = mouseState.Y;
+                this.ep = true;
+
+            }
+                // If the right button has been pressed
+                if (mouseState.RightButton == ButtonState.Pressed)
             {
                 // This is the new player destination
                 this.destination.X = mouseState.X;
@@ -225,6 +240,15 @@ namespace LeagueOf2D
             // Prepare this position
             Vector2 print = new Vector2(printX, printY);
 
+            if ( this.ep  )
+            {
+                PathNode aux = this.path.path_map[(int) this.path_dest.X, (int) this.path_dest.Y];
+                while ( aux.father != null)
+                {
+                    spriteBatch.Draw(this.skin,new Vector2(aux.x, aux.y),new Microsoft.Xna.Framework.Rectangle(23,23,2,2), Microsoft.Xna.Framework.Color.White);
+                    aux = aux.father;
+                }
+            }
             // Prints it
             spriteBatch.Draw(this.skin, print, Microsoft.Xna.Framework.Color.White);
         }
