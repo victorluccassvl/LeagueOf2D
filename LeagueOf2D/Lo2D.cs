@@ -1,20 +1,18 @@
-﻿using System;
-using System.IO;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Content;
+using System;
 
 namespace LeagueOf2D
 {
-    /**
+    /*\
      * Main class of League Of 2D, which inherit from Game class of MonoGame
-     */
+    \*/
     public class Lo2D : Game
     {
-        /**
+        /*\
          * Attributes and Properties
-         */
+        \*/
 
         // Object to control game window
         private GraphicsDeviceManager graphics;
@@ -29,9 +27,9 @@ namespace LeagueOf2D
 
 
 
-        /**
+        /*\
          * League of Legends 2D constructor
-         */
+        \*/
         public Lo2D ()
         {
             // Create the graphic object
@@ -44,12 +42,12 @@ namespace LeagueOf2D
 
 
 
-        /**
+        /*\
          * MonoGame Initialize method
          *
          * Where things should be initialize at the beggining of game loop
          * ( is called only once )
-         */
+        \*/
         protected override void Initialize ()
         {
             // Initializes screen size variable with defined constant
@@ -72,12 +70,12 @@ namespace LeagueOf2D
 
 
 
-        /**
+        /*\
          * MonoGame Load method
          *
          * Where things should be loaded in order to be used at the game
          * ( is called only once )
-         */
+        \*/
         protected override void LoadContent ()
         {
             // Loads spriteBatch object
@@ -85,18 +83,20 @@ namespace LeagueOf2D
 
             // Loads the map
             this.map.LoadMap();
+
             // Loads the test player
             this.lux.LoadPlayer();
+
         }
 
 
 
-        /**
+        /*\
          * MonoGame Unload method
          *
          * Where things should be unloaded in order to close the game
          * ( is called only once )
-         */
+        \*/
         protected override void UnloadContent ()
         {
             //TODO
@@ -104,14 +104,14 @@ namespace LeagueOf2D
 
 
 
-        /**
+        /*\
          * MonoGame Update method
          *
          * Where all dynamic logic that controls the game should be implemented
          * ( is called every game tick )
          *
          * :gameTime: snapshot variable that holds all Game time information
-         */
+        \*/
         protected override void Update (GameTime gameTime)
         {
             // Monogame sugested exit shortcuts
@@ -129,14 +129,14 @@ namespace LeagueOf2D
 
 
 
-        /**
+        /*\
          * MonoGame Draw method
          *
          * Where all sprites and graphics will be shown at the screen
          * ( is called every game tick )
          *
          * :gameTime: snapshot variable that holds all Game time information
-         */
+        \*/
         protected override void Draw (GameTime gameTime)
         {
             // Monogame suggested screen initialization
@@ -146,7 +146,7 @@ namespace LeagueOf2D
             this.spriteBatch.Begin();
 
             // Draws game map, sending the prepared spriteBatch and game time
-            this.map.DrawMap(gameTime, this.spriteBatch);
+            this.map.DrawMap(gameTime, this.spriteBatch, this.lux.cam);
             // Draws test player, sending the prepared spriteBatch and game time
             this.lux.DrawPlayer(gameTime, this.spriteBatch);
 

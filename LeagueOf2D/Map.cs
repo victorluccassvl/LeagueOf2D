@@ -1,39 +1,36 @@
-﻿using System;
-using System.Drawing;
-using System.IO;
+﻿using System.Drawing;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
 
 namespace LeagueOf2D
 {
-    /**
+    /*\
      * Map class that represents the terrain in which the game will run
      * Contains a structure to verify terrain colision
-     */
+    \*/
     class Map
     {
-        /**
+        /*\
          * Attributes and Properties
-         */
+        \*/
 
         // Game's content manager reference
-        private ContentManager content;
+        public ContentManager content;
         // Map texture
-        private Texture2D map;
+        public Texture2D map;
         // Map of pixels that warns if that area is solid or not
-        private bool[,] obstruction;
+        public bool[,] obstruction;
         // Map size
         public Vector2 size;
 
 
 
-        /**
+        /*\
          * Map constructor
          * 
          * :content: content reference given from the game
-         */
+        \*/
         public Map (ContentManager content)
         {
             this.content = content;
@@ -41,11 +38,13 @@ namespace LeagueOf2D
 
 
 
-        /**
+        /*\
          * Map Load method
          * 
          * Loads map texture and creates the obstruction map from it
-         */
+         * 
+         * :return: nothing
+        \*/
         public void LoadMap ()
         {
             // Loads map texture
@@ -55,26 +54,19 @@ namespace LeagueOf2D
             this.size.X = this.map.Width;
             this.size.Y = this.map.Height;
 
-            // Block that transforms this Texture2D into a Bitmap, to call CreateMap
-            {
-                // Creates a memory stream
-                MemoryStream MS = new MemoryStream();
-                // Fills it with Texture2D information
-                this.map.SaveAsPng(MS, this.map.Width, this.map.Height);
-                // Rewinds it
-                MS.Seek(0, SeekOrigin.Begin);
-                // Calls CreateMap method, passing the Bitmap formed from memory stream
-                this.CreateMap((Bitmap) Bitmap.FromStream(MS));
-            }
+            // Transforms this Texture2D into a Bitmap and call CreateMap
+            this.CreateMap(Methods.ConvertToBitmap(this.map));
         }
 
 
 
-        /**
+        /*\
          * Map Unload method
          * 
          * Unload map related textures and structures
-         */
+         * 
+         * :return: nothing
+        \*/
         public void UnloadMap ()
         {
             //TODO
@@ -82,13 +74,15 @@ namespace LeagueOf2D
 
 
 
-        /**
+        /*\
          * Map Update method
          * 
          * Where all map dynamic  map modifications should be done
          * 
          * :gameTime: snapshot variable that holds all Game time information
-         */
+         * 
+         * :return: nothing
+        \*/
         public void UpdateMap (GameTime gameTime)
         {
             //Empty for now
@@ -96,27 +90,40 @@ namespace LeagueOf2D
 
 
 
-        /**
+        /*\
          * Map Draw method
          * 
          * Where all sprites and graphics will be shown at the screen
          * 
          * :gameTime: snapshot variable that holds all Game time information
          * :spriteBatch: Game's spriteBatch reference, already prepared
-         */
-        public void DrawMap (GameTime gameTime, SpriteBatch spriteBatch)
+         * :cam: Player's camera origin
+         * 
+         * :return: nothing
+        \*/
+        public void DrawMap (GameTime gameTime, SpriteBatch spriteBatch, Vector2 cam)
         {
+            int X = (int) Ctt.screen_size.X;
+            int Y = (int) Ctt.screen_size.Y;
+
+            // Initializes screen rectangle where it'll draw
+            Microsoft.Xna.Framework.Rectangle screen = new Microsoft.Xna.Framework.Rectangle(0, 0, X, Y);
+            // Initializes texture rectangle that will be draw
+            Microsoft.Xna.Framework.Rectangle source = new Microsoft.Xna.Framework.Rectangle((int)cam.X, (int)cam.Y, X, Y);
+
             // Draws the map texture at defined position, with a transparent background
-            spriteBatch.Draw(this.map, Ctt.map_origin, Microsoft.Xna.Framework.Color.White);
+            spriteBatch.Draw(this.map, screen, source, Microsoft.Xna.Framework.Color.White);
         }
 
 
 
-        /**
+        /*\
          * Method that initializes the obstruction map, given it's Bitmap form
          * 
          * :map: Bitmap representation created by Load Map method
-         */
+         * 
+         * :return: nothing
+        \*/
         private void CreateMap (Bitmap map)
         {
             // Creates the obstruction map with appropriate size
@@ -124,6 +131,7 @@ namespace LeagueOf2D
 
             // Creates a reading pixel object
             System.Drawing.Color pixel;
+
             // Iterates the map
             for (int x = 0; x < map.Width; x++)
             {
@@ -140,12 +148,14 @@ namespace LeagueOf2D
         }
 
 
-
-        /**
+        
+        /*\
          * Method that informs if given position is obstructed or not
          * 
          * :x,y: coordenates
-         */
+         * 
+         * :return: nothing
+        \*/
         public bool isObstructed (int x, int y)
         {
             return this.obstruction[x, y];
