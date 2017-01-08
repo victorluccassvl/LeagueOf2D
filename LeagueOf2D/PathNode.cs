@@ -32,7 +32,6 @@ namespace LeagueOf2D
         public bool obstructed;
         // The node that threw this node at queue
         public PathNode previous;
-        public PathNode next;
 
 
 

@@ -174,7 +174,6 @@ namespace LeagueOf2D
                 // If the right button has been pressed
                 if (mouse_state.RightButton == ButtonState.Pressed)
                 {
-                    Console.WriteLine("NOVANOVANOVANOVANOVANOVA");
                     // Find the destination
                     this.destination.X = this.cam.X + mouse_state.X;
                     this.destination.Y = this.cam.Y + mouse_state.Y;
@@ -189,8 +188,10 @@ namespace LeagueOf2D
                     // If it's not the origin, and it will move
                     if (this.moving)
                     {
+                        Console.WriteLine("Creating Path");
                         // Creates a path for it to follow
                         this.path.CreatePath(this.destination, this.position);
+                        Console.WriteLine("Path created");
                     }
                 }
 
@@ -199,7 +200,6 @@ namespace LeagueOf2D
                 {
                     // Finds how far it can move at this tick
                     float distance = this.speed * gameTime.ElapsedGameTime.Milliseconds;
-                    Console.WriteLine("Distance: " + distance);
 
                     // Makes it move
                     this.moving = this.path.Walk(distance);

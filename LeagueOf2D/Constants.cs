@@ -42,7 +42,7 @@ namespace LeagueOf2D
         public static Vector2 player_initial_destination = new Vector2(0.0f, 0.0f);
 
         // Player default speed
-        public static float player_speed = 10.0f;
+        public static float player_speed = 0.2f;
         // Cam default speed
         public static float cam_initial_speed = 0.7f;
         // Cam hitbox constant

@@ -114,7 +114,6 @@ namespace LeagueOf2D
 
                     // Sets the previous node as null
                     this.path_map[x][y].previous = null;
-                    this.path_map[x][y].next = null;
                 }
             }
         }
@@ -196,7 +195,6 @@ namespace LeagueOf2D
                                 }
 
                                 // Creates a path from removed node to this neighbour
-                                removed.next = neighbour;
                                 neighbour.previous = removed;
 
                                 // If neighbour node is the destiny, the path has been found
@@ -234,7 +232,6 @@ namespace LeagueOf2D
                                     // Updates this neighbour and make a path between it and removed node
                                     neighbour.cost_to_arrive_here = temp_cost;
                                     neighbour.priority = temp_cost + neighbour.distance_to_destiny;
-                                    removed.next = neighbour;
                                     neighbour.previous = removed;
 
                                     // Updates this neighbour position in priority queue
@@ -244,10 +241,27 @@ namespace LeagueOf2D
                         }
                     }
                 }
+  
+                Invert(this.path_map[(int)destiny.X][(int)destiny.Y]);
             }
         }
 
 
+        public PathNode Invert (PathNode start)
+        {
+            if (start == null || start.previous == null)
+            {
+                return start;
+            }
+
+            PathNode reverse = Invert(start.previous);
+
+            start.previous.previous = start;
+
+            start.previous = null;
+
+            return reverse;
+        }
 
 
         public bool Walk (float distance)
@@ -255,13 +269,12 @@ namespace LeagueOf2D
             int x, y, next_x, next_y;
             PathNode neighbour;
 
-            Console.WriteLine("So?\n");
             while (distance > 0)
             {
                 x = (int)this.current_pixel.X;
                 y = (int)this.current_pixel.Y;
 
-                neighbour = this.path_map[x][y].next;
+                neighbour = this.path_map[x][y].previous;
                 
                 if (neighbour == null)
                 {
